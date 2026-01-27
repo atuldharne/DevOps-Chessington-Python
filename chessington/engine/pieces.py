@@ -39,15 +39,37 @@ class Pawn(Piece):
     """
     A class representing a chess pawn.
     """
+    def __init__(self, player: Player):
+        super().__init__(player)
+        self.has_moved = False
+
     def get_available_moves(self, board) -> List[Square]:
         current_square = board.find_piece(self)
+        moves = []
+        
         if self.player == Player.BLACK:
             square_in_front = Square.at(current_square.row - 1, current_square.col)
-            return [square_in_front]
+            if board.is_square_empty(square_in_front):
+                moves.append(square_in_front)
+                # Two squares forward on first move if not moved
+                if not self.has_moved:
+                    two_squares_in_front = Square.at(current_square.row - 2, current_square.col)
+                    if board.is_square_empty(two_squares_in_front) and board.is_square_empty(two_squares_in_front):
+                        moves.append(two_squares_in_front)
         else:
             square_in_front = Square.at(current_square.row + 1, current_square.col)
-            return [square_in_front]
-
+            if board.is_square_empty(square_in_front):
+                moves.append(square_in_front)
+                # Two squares forward on first move if not moved
+                if not self.has_moved:
+                    two_squares_in_front = Square.at(current_square.row + 2, current_square.col)
+                    if board.is_square_empty(two_squares_in_front) and board.is_square_empty(two_squares_in_front):
+                        moves.append(two_squares_in_front)
+        return moves
+    
+    def move_to(self, board: Board, new_square):
+        super().move_to(board, new_square)
+        self.has_moved = True
 
 class Knight(Piece):
     """
