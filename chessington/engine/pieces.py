@@ -85,8 +85,26 @@ class Bishop(Piece):
     A class representing a chess bishop.
     """
 
-    def get_available_moves(self, board):
-        return []
+    def get_available_moves(self, board) -> List[Square]:
+        current_square = board.find_piece(self)
+        moves = []
+        # Diagonal moves
+        directions = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+        for d_row, d_col in directions:
+            for distance in range(1, 8):
+                new_row = current_square.row + d_row * distance
+                new_col = current_square.col + d_col * distance
+                if 0 <= new_row < 8 and 0 <= new_col < 8:
+                    new_square = Square.at(new_row, new_col)
+                    if board.is_square_empty(new_square):
+                        moves.append(new_square)
+                    else:
+                        # Stop if we hit another piece
+                        break
+                else:
+                    break
+        return moves
 
 
 class Rook(Piece):
@@ -94,17 +112,52 @@ class Rook(Piece):
     A class representing a chess rook.
     """
 
-    def get_available_moves(self, board):
-        return []
+    def get_available_moves(self, board) -> List[Square]:
+        current_square = board.find_piece(self)
+        moves = []
+        # Horizontal and vertical moves
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+        for d_row, d_col in directions:
+            for distance in range(1, 8):
+                new_row = current_square.row + d_row * distance
+                new_col = current_square.col + d_col * distance
+                if 0 <= new_row < 8 and 0 <= new_col < 8:
+                    new_square = Square.at(new_row, new_col)
+                    if board.is_square_empty(new_square):
+                        moves.append(new_square)
+                    else:
+                        # Stop if we hit another piece
+                        break
+                else:
+                    break
+        return moves
 
 
 class Queen(Piece):
     """
     A class representing a chess queen.
     """
-
-    def get_available_moves(self, board):
-        return []
+    def get_available_moves(self, board) -> List[Square]:
+        # Queen moves both like a rook and a bishop
+        current_square = board.find_piece(self)
+        moves = []
+        # Combine directions of rook and bishop
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        for d_row, d_col in directions:
+            for distance in range(1, 8):
+                new_row = current_square.row + d_row * distance
+                new_col = current_square.col + d_col * distance
+                if 0 <= new_row < 8 and 0 <= new_col < 8:
+                    new_square = Square.at(new_row, new_col)
+                    if board.is_square_empty(new_square):
+                        moves.append(new_square)
+                    else:
+                        # Stop if we hit another piece
+                        break
+                else:
+                    break
+        return moves
 
 
 class King(Piece):
@@ -112,5 +165,17 @@ class King(Piece):
     A class representing a chess king.
     """
 
-    def get_available_moves(self, board):
-        return []
+    def get_available_moves(self, board) -> List[Square]:
+        current_square = board.find_piece(self)
+        moves = []
+        # King moves one square in any direction
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+
+        for d_row, d_col in directions:
+            new_row = current_square.row + d_row
+            new_col = current_square.col + d_col
+            if 0 <= new_row < 8 and 0 <= new_col < 8:
+                new_square = Square.at(new_row, new_col)
+                if board.is_square_empty(new_square):
+                    moves.append(new_square)
+        return moves

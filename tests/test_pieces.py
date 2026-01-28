@@ -1,6 +1,6 @@
 from chessington.engine.board import Board
 from chessington.engine.data import Player, Square
-from chessington.engine.pieces import Pawn
+from chessington.engine.pieces import Pawn, King, Queen, Rook, Bishop, Knight
 
 class TestPawns:
 
@@ -102,3 +102,74 @@ class TestPawns:
         # Assert
         assert Square.at(4, 4) in moves
         assert Square.at(3, 4) not in moves
+
+class TestKings:
+
+    @staticmethod
+    def test_king_can_move_one_square_in_any_direction():
+
+        # Arrange
+        board = Board.empty()
+        king = King(Player.WHITE)
+        square = Square.at(3, 3)
+        board.set_piece(square, king)
+
+        # Act
+        moves = king.get_available_moves(board)
+
+        # Assert
+        assert Square.at(2, 2) in moves
+        assert Square.at(2, 3) in moves
+
+class TestQueens:
+
+    @staticmethod
+    def test_queen_can_move_any_number_of_squares_in_any_direction():    
+    
+    # Arrange
+        board = Board.empty()
+        queen = Queen(Player.WHITE)
+        square = Square.at(3, 3)
+        board.set_piece(square, queen)
+
+        # Act
+        moves = queen.get_available_moves(board)
+
+        # Assert
+        #Horizontal and Vertical
+        assert Square.at(0, 3) in moves
+        #Diagonal
+        assert Square.at(0, 0) in moves
+
+class TestRooks:
+    @staticmethod
+    def test_rook_can_move_any_number_of_squares_horizontally_or_vertically():    
+    
+    # Arrange
+        board = Board.empty()
+        rook = Rook(Player.WHITE)
+        square = Square.at(3, 3)
+        board.set_piece(square, rook)
+
+        # Act
+        moves = rook.get_available_moves(board)
+
+        # Assert
+        assert Square.at(0, 3) in moves
+
+class TestBishops:
+    @staticmethod
+    def test_bishop_can_move_any_number_of_squares_diagonally():    
+    
+    # Arrange
+        board = Board.empty()
+        bishop = Bishop(Player.WHITE)
+        square = Square.at(3, 3)
+        board.set_piece(square, bishop)
+
+        # Act
+        moves = bishop.get_available_moves(board)
+
+        # Assert
+        assert Square.at(0, 0) in moves
+        assert Square.at(7, 7) in moves 
